@@ -1,29 +1,30 @@
 const db = require("../config/db");
 
 class Student {
+  
   static async getAllStudents() {
     //join classes when fetching students
     const [result] = await db.query(`
        SELECT 
     s.id,
-    s.admission_no,
-    s.first_name,
-    s.last_name,
-    s.other_names,
+    s.admissionNo,
+    s.firstName,
+    s.lastName,
+    s.otherNames,
     s.gender,
     s.email,
     s.phone,
     s.status,
-    s.admission_date,
+    s.admissionDate,
     c.name AS class,
     c.arm AS arm,
     d.name AS department
 
 FROM students s
 LEFT JOIN classes c
-    ON s.class_id = c.id
+    ON s.classId = c.id
 LEFT JOIN departments d
-    ON s.department_id = d.id
+    ON s.departmentId = d.id
 ORDER BY s.created_at DESC;
        `);
     return result;
@@ -33,22 +34,42 @@ ORDER BY s.created_at DESC;
     const [rows] = await db.query(
       `
       SELECT COUNT(*) as total FROM students
-      WHERE name LIKE ?
+      WHERE firstName LIKE ?
     `,
       [`%${search}%`],
     );
     return rows[0].total;
   }
-  static async addStudent(name, admissionNo, className, gender, email, phone) {
+  static async addStudent(
+    firstName,
+    lastName,
+    admissionNo,
+    gender,
+    dob,
+    email,
+    phone,
+    address,
+    parentName,
+    parentPhone,
+  ) {
+    const id = uuidv4();
     const sql = `
-        INSERT INTO students (name, admissionNo, className, gender, email, phone)
-        VALUES (?, ?, ?, ?, ?, ?)
+        INSERT INTO students (id, firstName, lastName, admissionNo, gender, dob, email, phone, address, parentName, parentPhone)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `;
-    const [rows] = db.query(
-      sql,
-      [name, admissionNo, className, gender, email, phone],
-      callback,
-    );
+    const [rows] = db.query(sql, [
+      id,
+      firstName,
+      lastName,
+      admissionNo,
+      gender,
+      dob,
+      email,
+      phone,
+      address,
+      parentName,
+      parentPhone,
+    ]);
     return rows;
   }
 }

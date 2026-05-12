@@ -11,7 +11,7 @@ exports.loginStaff = async (req, res) => {
         .status(400)
         .json({ success: false, message: "All fields are required" });
     }
-    const staff = await StaffModel.findByEmail(email);
+    const staff = await StaffModel.getByEmail(email);
     if (!staff) {
       return res
         .status(404)
@@ -31,6 +31,7 @@ exports.loginStaff = async (req, res) => {
     );
     return res.status(200).json({ success: true, staff, token });
   } catch (error) {
+    console.log(error)
     return res.status(500).json({ error });
   }
 };
