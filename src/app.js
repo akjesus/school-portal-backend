@@ -17,6 +17,7 @@ app.use("/api/v1/staff", require("./routes/StaffRoutes"));
 app.use("/api/v1/subjects", require("./routes/SubjectRoutes"));
 app.use("/api/v1/applications", require("./routes/ApplicationRoutes"));
 app.use("/api/v1/contacts", require("./routes/ContactRoutes"));
+app.use("/api/v1/dashboard", require("./routes/DashboardRoutes"));
 
 
 app.get("/", (req, res) => {
