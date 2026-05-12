@@ -57,15 +57,17 @@ exports.createApplication = async (req, res) => {
         .status(400)
         .json({ success: false, message: "Failed to create application" });
     }
+    res
+      .status(201)
+      .json({ success: true, message: "Application created successfully" });
+
     const sendEmail = new Email({
       name: application.fullName,
       email: application.email,
       applicationNo: application.applicationNo,
     });
     await sendEmail.sendApplication();
-    return res
-      .status(201)
-      .json({ success: true, message: "Application created successfully" });
+    
   } catch (error) {
     console.log(error);
     res.status(500).json({ success: false, message: error.message });
@@ -86,6 +88,10 @@ exports.updateApplicationStatus = async (req, res) => {
         .status(404)
         .json({ success: false, message: "Application not found" });
     }
+    res.status(200).json({
+      success: true,
+      message: "Application status updated successfully",
+    });
     const sendEmail = new Email({
       name: application.fullName,
       email: application.email,
@@ -96,10 +102,7 @@ exports.updateApplicationStatus = async (req, res) => {
     } else if (status === "rejected") {
       await sendEmail.sendRejection();
     }
-    res.status(200).json({
-      success: true,
-      message: "Application status updated successfully",
-    });
+    
   } catch (error) {
     console.log(error.message);
     res.status(500).json({ success: false, error: error.message });
