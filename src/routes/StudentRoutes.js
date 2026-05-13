@@ -5,7 +5,7 @@ const restrictTo = require("../controllers/AuthController").restrictTo;
 
 // router.use(verifyToken);
 router.get("/", studentController.getAllStudents);
-router.use(restrictTo(["admin", "staff"]));
+// router.use(restrictTo(["admin", "staff"]));
 router.post("/", studentController.createStudent);
 
 module.exports = router;
